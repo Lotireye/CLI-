@@ -1,0 +1,35 @@
+# Binarios compilados
+programa
+*.out
+*.exe
+
+# Archivos objeto
+*.o
+*.obj
+
+# Archivos de depuración
+*.dSYM/
+*.su
+
+# Archivos generados por sanitizers / valgrind
+*.log
+core
+core.*
+vgcore.*
+
+# Directorios de build (por si más adelante organizás así)
+build/
+bin/
+obj/
+
+# Archivos de editores / IDEs
+.vscode/
+.idea/
+*.swp
+*~
+
+# Archivos específicos de clangd (si usás LSP en Neovim)
+compile_commands.json
+
+# Archivos del sistema
+.DS_Store

@@ -1,5 +1,6 @@
 #include "procesartextos.h"
 #include <ctype.h>
+#include <fcntl.h>
 #include <stddef.h>
 #include <stdlib.h>
 #include <string.h>
@@ -36,6 +37,7 @@ char **parsear(const char *input) {
 
       argumentos[indiceArg] = malloc(longitudPalabra + 1);
       if (argumentos[indiceArg] == NULL) {
+        liberar(argumentos);
         return NULL;
       }
 
