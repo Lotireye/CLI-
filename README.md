@@ -8,22 +8,22 @@ Construir un shell funcional desde cero, entendiendo en profundidad los concepto
 ## Funcionalidad objetivo
 
 ```text
-mycli> pwd
+LotShell> pwd
 /home/user
 
-mycli> cd proyectos
-mycli> ls -la
-mycli> echo hola > archivo.txt
-mycli> cat archivo.txt
-mycli> ls | grep ".c"
-mycli> exit
+LotShell> cd proyectos
+lotShell> ls -la
+LotShell> echo hola > archivo.txt
+LotShell> cat archivo.txt
+LotShell> ls | grep ".c"
+LotShell> exit
 ```
 
 Es decir, un shell capaz de: interpretar comandos, ejecutar tanto comandos internos (builtins) como programas externos, redirigir salida a archivos, encadenar procesos con pipes, y manejar señales del usuario (`Ctrl+C`, `Ctrl+Z`).
 
 ## Estado
 
-Funcional de punta a punta: parser de comandos, builtins (`cd`, `pwd`, `exit`, `help`, `export`, `unset`, `env`), ejecución de programas externos vía `fork`/`execvp`/`waitpid`, redirección de salida (`>`) y pipes (`|`, con soporte para dos comandos encadenados). Queda pendiente el manejo de señales.
+Funcional de punta a punta: parser de comandos, builtins (`cd`, `pwd`, `exit`, `help`, `export`, `unset`, `env`), ejecución de programas externos vía `fork`/`execvp`/`waitpid`, redirección de salida (`>`) y pipes (`|`, con soporte para dos comandos encadenados) y manejo de señales (`Ctrl + C`, `Ctrl + Z`).
 
 Limitaciones conocidas: sin historial de comandos ni edición de línea con flechas (requeriría integrar GNU Readline o libedit en vez de `fgets`); el parser no interpreta comillas, así que argumentos con espacios o caracteres especiales entre comillas (`grep ".c"`) se pasan literalmente con las comillas incluidas.
 
@@ -55,8 +55,8 @@ mi-cli/
     └── main.c
 ```
 
-- **main.c** — ciclo principal del shell: mostrar prompt, leer entrada, procesarla, ejecutarla, repetir.
-- **procesartextos.c** — parser. Convierte la línea de texto ingresada por el usuario en un arreglo de argumentos (`char **`, estilo `argv`) que el resto del programa pueda usar.
+- **main.c** — ciclo principal del shell: mostrar prompt, leer entrada, procesarla, ejecutarla, repetir. Control de señales basico.
+- **procesartextos.c** — parser. Convierte la línea de texto ingresada por el usuario en un arreglo de argumentos (`char **`, gestióno `argv`) que el resto del programa pueda usar.
 - **gestorcomandos.c** — punto de decisión del shell. Determina si un comando es interno (builtin) o un programa externo, y delega la ejecución al módulo correspondiente, sin ejecutar nada él mismo.
 - **builtins.c** — comandos que deben ejecutarse dentro del propio proceso del shell porque modifican su estado (por ejemplo `cd`, que no tendría efecto si se ejecutara en un proceso hijo): `cd`, `pwd`, `exit`, `export`, `unset`, `env`, `help`.
 - **procesos.c** — ejecución de programas externos del sistema mediante creación de procesos (`fork`, `exec`, `wait`).
@@ -78,7 +78,7 @@ mi-cli/
 No busca ser una reimplementación de un shell existente, sino un ejercicio de construcción incremental: cada etapa se diseña, se implementa y se prueba antes de pasar a la siguiente, priorizando buenas prácticas de C — gestión correcta de memoria, separación de responsabilidades entre módulos y manejo explícito de errores.
 Un CLI (intérprete de línea de comandos) interactivo escrito en C puro, con arquitectura modular, que progresivamente incorpora funcionalidades propias de un shell tipo Unix.
 
-o (builtin) o un programa externo, y delega la ejecución al módulo correspondiente, sin ejecutar nada él mismo.
+Ejecucion de Comandos:
 - **builtins.c** — comandos que deben ejecutarse dentro del propio proceso del shell porque modifican su estado (por ejemplo `cd`, que no tendría efecto si se ejecutara en un proceso hijo): `cd`, `pwd`, `exit`, `export`, `unset`, `env`, `help`.
 - **procesos.c** — ejecución de programas externos del sistema mediante creación de procesos (`fork`, `exec`, `wait`).
 
