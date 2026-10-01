@@ -13,7 +13,7 @@ void ejecutarProceso(char **argumentos) {
   } else if (pid == 0) {
     char *archivoSalida = NULL;
     if (extraerRedireccion(argumentos, &archivoSalida)) {
-      int fd = open(archivoSalida, O_WRONLY | O_CREAT, O_TRUNC, 0644);
+      int fd = open(archivoSalida, O_WRONLY | O_CREAT | O_TRUNC, 0644);
       if (fd == -1) {
         perror("open");
         exit(1);

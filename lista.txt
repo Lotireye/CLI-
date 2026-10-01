@@ -1,0 +1,8 @@
+compile_flags.txt
+include
+lista.txt
+Makefile
+programa
+README.md
+salida.txt
+src
